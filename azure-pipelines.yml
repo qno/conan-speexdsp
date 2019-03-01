@@ -20,6 +20,7 @@ jobs:
         displayName: conan create package
       - script: |
           echo "TODO ..."
+          conan search
           conan search $(current_pkg)
         displayName: conan publish recipe and package
   - job: macOS
@@ -35,6 +36,7 @@ jobs:
         displayName: conan create package
       - script: |
           echo "TODO ..."
+          conan search
           conan search $(current_pkg)
         displayName: conan publish recipe and package
   - job: Windows
@@ -52,5 +54,7 @@ jobs:
         displayName: conan create package
       - script: |
           echo "TODO ..."
+          conan search
           conan search $(current_pkg)
+          SET
         displayName: conan publish recipe and package
