@@ -2,6 +2,7 @@ trigger:
 - master
 
 variables:
+  reference: "qno/testing"
   current_pkg: "SpeexDSP/1.2rc3/qno/testing"
 
 jobs:
@@ -15,7 +16,7 @@ jobs:
           sudo pip3 install conan
         displayName: install conan
       - script: |
-          conan create . qno/testing
+          conan create . $(reference)
         displayName: conan create package
       - script: |
           echo "TODO ..."
@@ -30,7 +31,7 @@ jobs:
           pip3 install conan
         displayName: install conan
       - script: |
-          conan create . qno/testing
+          conan create . $(reference)
         displayName: conan create package
       - script: |
           echo "TODO ..."
@@ -47,7 +48,7 @@ jobs:
         displayName: install conan
       - script: |
           set PATH=%PYTHON_HOME%\Scripts;%PATH%
-          conan create . qno/testing
+          conan create . $(reference)
         displayName: conan create package
       - script: |
           echo "TODO ..."
