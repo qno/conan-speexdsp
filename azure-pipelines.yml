@@ -1,6 +1,9 @@
 trigger:
 - master
 
+variables:
+  current_pkg: "SpeexDSP/1.2rc3/qno/testing"
+
 jobs:
   - job: Linux
     pool:
@@ -13,12 +16,10 @@ jobs:
         displayName: install conan
       - script: |
           conan create . qno/testing
-        displayName: conan create package x86_64
-      - script: |
-          conan create . qno/testing --settings arch=x86
-        displayName: conan create package x86
+        displayName: conan create package
       - script: |
           echo "TODO ..."
+          conan search $(current_pkg)
         displayName: conan publish recipe and package
   - job: macOS
     pool:
@@ -30,12 +31,10 @@ jobs:
         displayName: install conan
       - script: |
           conan create . qno/testing
-        displayName: conan create package x86_64
-      - script: |
-          conan create . qno/testing --settings arch=x86
-        displayName: conan create package x86
+        displayName: conan create package
       - script: |
           echo "TODO ..."
+          conan search $(current_pkg)
         displayName: conan publish recipe and package
   - job: Windows
     pool:
@@ -49,11 +48,8 @@ jobs:
       - script: |
           set PATH=%PYTHON_HOME%\Scripts;%PATH%
           conan create . qno/testing
-        displayName: conan create package x86_64
-      - script: |
-          set PATH=%PYTHON_HOME%\Scripts;%PATH%
-          conan create . qno/testing --settings arch=x86
-        displayName: conan create package x86
+        displayName: conan create package
       - script: |
           echo "TODO ..."
+          conan search $(current_pkg)
         displayName: conan publish recipe and package
