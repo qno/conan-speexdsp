@@ -13,7 +13,10 @@ jobs:
         displayName: install conan
       - script: |
           conan create . qno/testing
-        displayName: conan create package
+        displayName: conan create package x86_64
+      - script: |
+          conan create . qno/testing --settings arch=x86
+        displayName: conan create package x86
       - script: |
           echo "TODO ..."
         displayName: conan publish recipe and package
@@ -27,7 +30,10 @@ jobs:
         displayName: install conan
       - script: |
           conan create . qno/testing
-        displayName: conan create package
+        displayName: conan create package x86_64
+      - script: |
+          conan create . qno/testing --settings arch=x86
+        displayName: conan create package x86
       - script: |
           echo "TODO ..."
         displayName: conan publish recipe and package
@@ -43,7 +49,11 @@ jobs:
       - script: |
           set PATH=%PYTHON_HOME%\Scripts;%PATH%
           conan create . qno/testing
-        displayName: conan create package
+        displayName: conan create package x86_64
+      - script: |
+          set PATH=%PYTHON_HOME%\Scripts;%PATH%
+          conan create . qno/testing --settings arch=x86
+        displayName: conan create package x86
       - script: |
           echo "TODO ..."
         displayName: conan publish recipe and package
