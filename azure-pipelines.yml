@@ -1,0 +1,49 @@
+trigger:
+- master
+
+jobs:
+  - job: Linux
+    pool:
+      vmImage: Ubuntu-16.04
+    steps:
+      - script: |
+          sudo apt install -y python3-setuptools
+          sudo pip3 install --upgrade pip
+          sudo pip3 install conan
+        displayName: install conan
+      - script: |
+          conan create . qno/testing
+        displayName: conan create package
+      - script: |
+          echo "TODO ..."
+        displayName: conan publish recipe and package
+  - job: macOS
+    pool:
+      vmImage: xcode9-macos10.13
+    steps:
+      - script: |
+          pip3 install --upgrade pip
+          pip3 install conan
+        displayName: install conan
+      - script: |
+          conan create . qno/testing
+        displayName: conan create package
+      - script: |
+          echo "TODO ..."
+        displayName: conan publish recipe and package
+  - job: Windows
+    pool:
+      vmImage: vs2017-win2016
+    steps:
+      - script: |
+          :: need to add PYTHON_HOME as there is a conflicting chocolatey installed python which is somehow prefered in PATH
+          %PYTHON_HOME%/python -m pip install --upgrade pip
+          %PYTHON_HOME%/python -m pip install conan
+        displayName: install conan
+      - script: |
+          set PATH=%PYTHON_HOME%\Scripts;%PATH%
+          conan create . qno/testing
+        displayName: conan create package
+      - script: |
+          echo "TODO ..."
+        displayName: conan publish recipe and package
