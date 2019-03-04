@@ -166,6 +166,14 @@ jobs:
   - job: Windows
     pool:
       vmImage: vs2017-win2016
+    strategy:
+      matrix:
+        VStudio 2017 Release:
+          CONAN_VISUAL_VERSIONS: 15
+          CONAN_BUILD_TYPES: Release
+        VStudio 2017 Debug:
+          CONAN_VISUAL_VERSIONS: 15
+          CONAN_BUILD_TYPES: Debug
     steps:
       - script: |
           :: need to add PYTHON_HOME as there is a conflicting chocolatey installed python which is somehow prefered in PATH
@@ -176,7 +184,16 @@ jobs:
         displayName: install conan
       - script: |
           set PATH=%PYTHON_HOME%\Scripts;%PATH%
-          conan create . $(reference)
+          %PYTHON_HOME%/python build.py
+        env:
+          # https://github.com/bincrafters/bincrafters-package-tools
+          BINTRAY_REPOSITORY: $(bintray_repository)
+          CONAN_USERNAME: $(conan_user)
+          CONAN_UPLOAD: $(conan_upload_url)
+          CONAN_LOGIN_USERNAME: $(BINTRAY_LOGIN)
+          CONAN_PASSWORD: $(BINTRAY_API_KEY)
+          CONAN_UPLOAD_ONLY_WHEN_STABLE: $(conan_upload_only_stable)
+          CONAN_DOCKER_32_IMAGES: $(conan_use_docker_32_images)
         displayName: conan create package
       - script: |
           echo "TODO ..."
