@@ -143,6 +143,7 @@ jobs:
           /bin/bash -c "sudo xcode-select -s /Applications/Xcode_$(XCODE_VERSION).app/Contents/Developer"
           pip3 install --upgrade pip
           pip3 install conan
+          pip3 install conan_package_tools bincrafters_package_tools
           conan user
         displayName: install conan
       - script: |
@@ -170,6 +171,7 @@ jobs:
           :: need to add PYTHON_HOME as there is a conflicting chocolatey installed python which is somehow prefered in PATH
           %PYTHON_HOME%/python -m pip install --upgrade pip
           %PYTHON_HOME%/python -m pip install conan
+          %PYTHON_HOME%/python -m pip install conan_package_tools bincrafters_package_tools
           conan user
         displayName: install conan
       - script: |
