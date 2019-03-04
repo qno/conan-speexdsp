@@ -5,56 +5,92 @@ variables:
   reference: "qno/testing"
   current_pkg: "SpeexDSP/1.2rc3/qno/testing"
 
-resources:
-  containers:
-  - container: cnt_gcc49
-    image: conanio/gcc49
-  - container: cnt_gcc5
-    image: conanio/gcc5
-  - container: cnt_gcc6
-    image: conanio/gcc6
-  - container: cnt_gcc7
-    image: conanio/gcc7
-  - container: cnt_gcc8
-    image: conanio/gcc8
-  - container: cnt_clang39
-    image: conanio/clang39
-  - container: cnt_clang40
-    image: conanio/clang40
-  - container: cnt_clang50
-    image: conanio/clang50
-  - container: cnt_clang60
-    image: conanio/clang60
-  - container: cnt_clang7
-    image: conanio/clang7
-
 jobs:
   - job: Linux
     pool:
       vmImage: Ubuntu-16.04
-      strategy:
-        matrix:
-         gcc49:
-           containerImage: cnt_gcc49
-         gcc5:
-           containerImage: cnt_gcc5
-         gcc6:
-           containerImage: cnt_gcc6
-         gcc7:
-           containerImage: cnt_gcc7
-         gcc8:
-           containerImage: cnt_gcc8
-         clang39:
-           containerImage: cnt_clang39
-         clang40:
-           containerImage: cnt_clang40
-         clang50:
-           containerImage: cnt_clang50
-         clang60:
-           containerImage: cnt_clang60
-         clang7:
-           containerImage: cnt_clang7
-    container: $[ variables['containerResource'] ]
+    strategy:
+      matrix:
+        Gcc 4.9 x86:
+          CONAN_GCC_VERSIONS: 4.9
+          CONAN_DOCKER_IMAGE: conanio/gcc49
+          CONAN_ARCHS: "x86"
+        Gcc 4.9 x86_64:
+          CONAN_GCC_VERSIONS: 4.9
+          CONAN_DOCKER_IMAGE: conanio/gcc49
+          CONAN_ARCHS: "x86_64"
+        Gcc 5 x86:
+          CONAN_GCC_VERSIONS: 5
+          CONAN_DOCKER_IMAGE: conanio/gcc5
+          CONAN_ARCHS: "x86"
+        Gcc 5 x86_64:
+          CONAN_GCC_VERSIONS: 5
+          CONAN_DOCKER_IMAGE: conanio/gcc5
+          CONAN_ARCHS: "x86_64"
+        Gcc 6 x86:
+          CONAN_GCC_VERSIONS: 6
+          CONAN_DOCKER_IMAGE: conanio/gcc6
+          CONAN_ARCHS: "x86"
+        Gcc 6 x86_64:
+          CONAN_GCC_VERSIONS: 6
+          CONAN_DOCKER_IMAGE: conanio/gcc6
+          CONAN_ARCHS: "x86_64"
+        Gcc 7 x86:
+          CONAN_GCC_VERSIONS: 7
+          CONAN_DOCKER_IMAGE: conanio/gcc7
+          CONAN_ARCHS: "x86"
+        Gcc 7 x86_64:
+          CONAN_GCC_VERSIONS: 7
+          CONAN_DOCKER_IMAGE: conanio/gcc7
+          CONAN_ARCHS: "x86_64"
+        Gcc 8 x86:
+          CONAN_GCC_VERSIONS: 8
+          CONAN_DOCKER_IMAGE: conanio/gcc8
+          CONAN_ARCHS: "x86"
+        Gcc 8 x86_64:
+          CONAN_GCC_VERSIONS: 8
+          CONAN_DOCKER_IMAGE: conanio/gcc8
+          CONAN_ARCHS: "x86_64"
+        Clang 3.9 x86:
+          CONAN_CLANG_VERSIONS: 3.9
+          CONAN_DOCKER_IMAGE: conanio/clang39
+          CONAN_ARCHS: "x86"
+        Clang 3.9 x86_64:
+          CONAN_CLANG_VERSIONS: 3.9
+          CONAN_DOCKER_IMAGE: conanio/clang39
+          CONAN_ARCHS: "x86_64"
+        Clang 4.0 x86:
+          CONAN_CLANG_VERSIONS: 4.0
+          CONAN_DOCKER_IMAGE: conanio/clang40
+          CONAN_ARCHS: "x86"
+        Clang 4.0 x86_64:
+          CONAN_CLANG_VERSIONS: 4.0
+          CONAN_DOCKER_IMAGE: conanio/clang40
+          CONAN_ARCHS: "x86_64"
+        Clang 5.0 x86:
+          CONAN_CLANG_VERSIONS: 5.0
+          CONAN_DOCKER_IMAGE: conanio/clang50
+          CONAN_ARCHS: "x86"
+        Clang 5.0 x86_64:
+          CONAN_CLANG_VERSIONS: 5.0
+          CONAN_DOCKER_IMAGE: conanio/clang50
+          CONAN_ARCHS: "x86_64"
+        Clang 6.0 x86:
+          CONAN_CLANG_VERSIONS: 6.0
+          CONAN_DOCKER_IMAGE: conanio/clang60
+          CONAN_ARCHS: "x86"
+        Clang 6.0 x86_64:
+          CONAN_CLANG_VERSIONS: 6.0
+          CONAN_DOCKER_IMAGE: conanio/clang60
+          CONAN_ARCHS: "x86_64"
+        Clang 7 x86:
+          CONAN_CLANG_VERSIONS: 7
+          CONAN_DOCKER_IMAGE: conanio/clang7
+          CONAN_ARCHS: "x86"
+        Clang 7 x86_64:
+          CONAN_CLANG_VERSIONS: 7
+          CONAN_DOCKER_IMAGE: conanio/clang7
+          CONAN_ARCHS: "x86_64"
     steps:
       - script: |
           sudo apt install -y python3-setuptools
