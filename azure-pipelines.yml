@@ -1,19 +1,14 @@
-script_env: &script_environment
-  # https://github.com/bincrafters/bincrafters-package-tools
-  BINTRAY_REPOSITORY: conan-public
-  CONAN_USERNAME: qno
-  CONAN_UPLOAD: https://api.bintray.com/conan/qno/conan-public
-  CONAN_LOGIN_USERNAME: $(BINTRAY_LOGIN)
-  CONAN_PASSWORD: $(BINTRAY_API_KEY)
-  CONAN_UPLOAD_ONLY_WHEN_STABLE: False
-  CONAN_DOCKER_32_IMAGES: True
-
 trigger:
 - master
 
 variables:
   reference: "qno/testing"
   current_pkg: "SpeexDSP/1.2rc3/qno/testing"
+  bintray_repository: conan-public
+  conan_user: qno
+  conan_upload_url: https://api.bintray.com/conan/qno/conan-public
+  conan_upload_only_stable: False
+  conan_use_docker_32_images: True
 
 jobs:
   - job: Linux
@@ -111,7 +106,15 @@ jobs:
         displayName: install conan
       - script: |
           python3 build.py
-        env: *script_environment
+        env:
+          # https://github.com/bincrafters/bincrafters-package-tools
+          BINTRAY_REPOSITORY: $(bintray_repository)
+          CONAN_USERNAME: $(conan_user)
+          CONAN_UPLOAD: $(conan_upload_url)
+          CONAN_LOGIN_USERNAME: $(BINTRAY_LOGIN)
+          CONAN_PASSWORD: $(BINTRAY_API_KEY)
+          CONAN_UPLOAD_ONLY_WHEN_STABLE: $(conan_upload_only_stable)
+          CONAN_DOCKER_32_IMAGES: $(conan_use_docker_32_images)
         displayName: conan create package
       - script: |
           echo "TODO ..."
@@ -144,7 +147,15 @@ jobs:
         displayName: install conan
       - script: |
           python3 build.py
-        env: *script_environment
+        env:
+          # https://github.com/bincrafters/bincrafters-package-tools
+          BINTRAY_REPOSITORY: $(bintray_repository)
+          CONAN_USERNAME: $(conan_user)
+          CONAN_UPLOAD: $(conan_upload_url)
+          CONAN_LOGIN_USERNAME: $(BINTRAY_LOGIN)
+          CONAN_PASSWORD: $(BINTRAY_API_KEY)
+          CONAN_UPLOAD_ONLY_WHEN_STABLE: $(conan_upload_only_stable)
+          CONAN_DOCKER_32_IMAGES: $(conan_use_docker_32_images)
         displayName: conan create package
       - script: |
           echo "TODO ..."
