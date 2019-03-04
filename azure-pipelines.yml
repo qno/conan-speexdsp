@@ -83,12 +83,12 @@ jobs:
           CONAN_CLANG_VERSIONS: 6.0
           CONAN_DOCKER_IMAGE: conanio/clang60
           CONAN_ARCHS: "x86_64"
-        Clang 7 x86:
-          CONAN_CLANG_VERSIONS: 7
+        Clang 7.0 x86:
+          CONAN_CLANG_VERSIONS: 7.0
           CONAN_DOCKER_IMAGE: conanio/clang7
           CONAN_ARCHS: "x86"
-        Clang 7 x86_64:
-          CONAN_CLANG_VERSIONS: 7
+        Clang 7.0 x86_64:
+          CONAN_CLANG_VERSIONS: 7.0
           CONAN_DOCKER_IMAGE: conanio/clang7
           CONAN_ARCHS: "x86_64"
     steps:
