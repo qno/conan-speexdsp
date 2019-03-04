@@ -4,7 +4,7 @@ project(LibSpeexDSPTest)
 include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
 conan_basic_setup()
 
-if ("${CMAKE_C_COMPILER_ID}" STREQUAL "GNU")
+if (NOT MSVC)
   set (CONAN_LIBS ${CONAN_LIBS} m)
 endif ()
 
