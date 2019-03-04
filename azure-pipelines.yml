@@ -121,14 +121,30 @@ jobs:
   - job: macOS
     pool:
       vmImage: xcode9-macos10.13
+    strategy:
+      matrix:
+        Clang 8.1:
+          CONAN_APPLE_CLANG_VERSIONS: 8.1
+          XCODE_VERSION: 8.3.3
+        Clang 9.0:
+          CONAN_APPLE_CLANG_VERSIONS: 9.0
+          XCODE_VERSION: 9.2
+        Clang 9.1:
+          CONAN_APPLE_CLANG_VERSIONS: 9.1
+          XCODE_VERSION: 9.4.1
+        Clang 10.0:
+          CONAN_APPLE_CLANG_VERSIONS: 10.0
+          XCODE_VERSION: 10
     steps:
       - script: |
+          /bin/bash -c "sudo xcode-select -s /Applications/Xcode_$(XCODE_VERSION).app/Contents/Developer"
           pip3 install --upgrade pip
           pip3 install conan
           conan user
         displayName: install conan
       - script: |
-          conan create . $(reference)
+          python3 build.py
+        env: *script_environment
         displayName: conan create package
       - script: |
           echo "TODO ..."
