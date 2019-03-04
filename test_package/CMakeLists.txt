@@ -16,13 +16,11 @@ foreach (TEST testdenoise testecho testjitter testresample testresample2)
   if (MSVC)
     # _USE_MATH_DEFINES needed for M_PI
     target_compile_definitions(${TEST} PRIVATE HAVE_CONFIG_H _USE_MATH_DEFINES)
+  # this is a workaround and needs to be fixed by configure_file with CMake
+  else () # GCC or Clang
+    target_compile_definitions(${TEST} PRIVATE HAVE_STDINT_H)
   endif ()
 
   target_link_libraries(${TEST} ${CONAN_LIBS})
-
-  # this is a workaround and needs to be fixed by configure_file with CMake
-  if ("${CMAKE_C_COMPILER_ID}" STREQUAL "GNU")
-    target_compile_definitions(${TEST} PRIVATE HAVE_STDINT_H)
-  endif ()
 
 endforeach ()
