@@ -5,6 +5,29 @@ variables:
   reference: "qno/testing"
   current_pkg: "SpeexDSP/1.2rc3/qno/testing"
 
+resources:
+  containers:
+  - container: cnt_gcc49
+    image: conanio/gcc49
+  - container: cnt_gcc5
+    image: conanio/gcc5
+  - container: cnt_gcc6
+    image: conanio/gcc6
+  - container: cnt_gcc7
+    image: conanio/gcc7
+  - container: cnt_gcc8
+    image: conanio/gcc8
+  - container: cnt_clang39
+    image: conanio/clang39
+  - container: cnt_clang40
+    image: conanio/clang40
+  - container: cnt_clang50
+    image: conanio/clang50
+  - container: cnt_clang60
+    image: conanio/clang60
+  - container: cnt_clang7
+    image: conanio/clang7
+
 jobs:
   - job: Linux
     pool:
@@ -12,25 +35,25 @@ jobs:
       strategy:
         matrix:
          gcc49:
-           containerImage: conanio/gcc49
+           containerImage: cnt_gcc49
          gcc5:
-           containerImage: conanio/gcc5
+           containerImage: cnt_gcc5
          gcc6:
-           containerImage: conanio/gcc6
+           containerImage: cnt_gcc6
          gcc7:
-           containerImage: conanio/gcc7
+           containerImage: cnt_gcc7
          gcc8:
-           containerImage: conanio/gcc8
+           containerImage: cnt_gcc8
          clang39:
-           containerImage: conanio/clang39
+           containerImage: cnt_clang39
          clang40:
-           containerImage: conanio/clang40
+           containerImage: cnt_clang40
          clang50:
-           containerImage: conanio/clang50
+           containerImage: cnt_clang50
          clang60:
-           containerImage: conanio/clang60
+           containerImage: cnt_clang60
          clang7:
-           containerImage: conanio/clang7
+           containerImage: cnt_clang7
     container: $[ variables['containerResource'] ]
     steps:
       - script: |
@@ -54,6 +77,7 @@ jobs:
       - script: |
           pip3 install --upgrade pip
           pip3 install conan
+          conan user
         displayName: install conan
       - script: |
           conan create . $(reference)
@@ -71,6 +95,7 @@ jobs:
           :: need to add PYTHON_HOME as there is a conflicting chocolatey installed python which is somehow prefered in PATH
           %PYTHON_HOME%/python -m pip install --upgrade pip
           %PYTHON_HOME%/python -m pip install conan
+          conan user
         displayName: install conan
       - script: |
           set PATH=%PYTHON_HOME%\Scripts;%PATH%
