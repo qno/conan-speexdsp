@@ -1,3 +1,13 @@
+script_env: &script_environment
+  # https://github.com/bincrafters/bincrafters-package-tools
+  BINTRAY_REPOSITORY: conan-public
+  CONAN_USERNAME: qno
+  CONAN_UPLOAD: https://api.bintray.com/conan/qno/conan-public
+  CONAN_LOGIN_USERNAME: $(BINTRAY_LOGIN)
+  CONAN_PASSWORD: $(BINTRAY_API_KEY)
+  CONAN_UPLOAD_ONLY_WHEN_STABLE: False
+  CONAN_DOCKER_32_IMAGES: True
+
 trigger:
 - master
 
@@ -101,15 +111,7 @@ jobs:
         displayName: install conan
       - script: |
           python3 build.py
-        env:
-          # https://github.com/bincrafters/bincrafters-package-tools
-          BINTRAY_REPOSITORY: conan-public
-          CONAN_USERNAME: qno
-          CONAN_UPLOAD: https://api.bintray.com/conan/qno/conan-public
-          CONAN_LOGIN_USERNAME: $(BINTRAY_LOGIN)
-          CONAN_PASSWORD: $(BINTRAY_API_KEY)
-          CONAN_UPLOAD_ONLY_WHEN_STABLE: False
-          CONAN_DOCKER_32_IMAGES: True
+        env: *script_environment
         displayName: conan create package
       - script: |
           echo "TODO ..."
