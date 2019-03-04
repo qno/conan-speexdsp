@@ -9,11 +9,35 @@ jobs:
   - job: Linux
     pool:
       vmImage: Ubuntu-16.04
+      strategy:
+        matrix:
+         gcc49:
+           containerImage: conanio/gcc49
+         gcc5:
+           containerImage: conanio/gcc5
+         gcc6:
+           containerImage: conanio/gcc6
+         gcc7:
+           containerImage: conanio/gcc7
+         gcc8:
+           containerImage: conanio/gcc8
+         clang39:
+           containerImage: conanio/clang39
+         clang40:
+           containerImage: conanio/clang40
+         clang50:
+           containerImage: conanio/clang50
+         clang60:
+           containerImage: conanio/clang60
+         clang7:
+           containerImage: conanio/clang7
+    container: $[ variables['containerResource'] ]
     steps:
       - script: |
           sudo apt install -y python3-setuptools
           sudo pip3 install --upgrade pip
           sudo pip3 install conan
+          conan user
         displayName: install conan
       - script: |
           conan create . $(reference)
