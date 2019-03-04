@@ -96,10 +96,13 @@ jobs:
           sudo apt install -y python3-setuptools
           sudo pip3 install --upgrade pip
           sudo pip3 install conan
+          sudo pip install  conan_package_tools bincrafters_package_tools
           conan user
         displayName: install conan
       - script: |
-          conan create . $(reference)
+          python3 build.py
+            env:
+              CONAN_DOCKER_32_IMAGES: True
         displayName: conan create package
       - script: |
           echo "TODO ..."
