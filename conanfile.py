@@ -1,4 +1,5 @@
 from conans import ConanFile, CMake, AutoToolsBuildEnvironment, tools
+from conans.errors import ConanInvalidConfiguration
 import os
 
 
@@ -10,7 +11,7 @@ class SpeexDSPConan(ConanFile):
     url = "https://github.com/qno/conan-speexdsp"
     description = "SpeexDSP is a patent-free, Open Source/Free Software DSP library."
 
-    settings = "os", "compiler", "build_type", "arch"
+    settings = "os", "arch", "compiler", "build_type", "os_build", "arch_build"
     options = {"shared": [True, False]}
     default_options = "shared=False"
     generators = "cmake"
@@ -23,6 +24,10 @@ class SpeexDSPConan(ConanFile):
         self.output.info("Downloading {}".format(url))
         tools.get(url)
         self._createCMakeLists()
+
+    def configure(self):
+        if self._isVisualStudioBuild() and self.options.shared:
+            raise ConanInvalidConfiguration("This library doesn't support dll's on Windows")
 
     def build(self):
         if self._isVisualStudioBuild():
