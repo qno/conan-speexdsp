@@ -73,6 +73,11 @@ if (NOT MSVC)
 endif ()
 
 include (CheckTypeSize)
+include (CheckIncludeFiles)
+
+check_include_files (stdint.h HAVE_STDINT_H)
+check_include_files (inttypes.h HAVE_INTTYPES_H)
+check_include_files (sys/types.h HAVE_SYS_TYPES_H)
 
 check_type_size ("int16_t" INT16_T BUILTIN_TYPES_ONLY LANGUAGE C)
 check_type_size ("short" SHORT16 BUILTIN_TYPES_ONLY LANGUAGE C)
@@ -142,7 +147,7 @@ if (NOT DEFINED ${{USIZE32}})
   message (WARNING "USIZE32 type check failed")
 endif ()
 
-configure_file(include/speex/speexdsp_config_types.h.in include/speex/speexdsp_config_types.h @ONLY)
+configure_file(include/speex/speexdsp_config_types.h.in include/speex/speexdsp_config_types.h)
 
 check_type_size ("bogus" XXX BUILTIN_TYPES_ONLY LANGUAGE C)
 message (FATAL_ERROR "check bogus type val: ${{XXX}}")
@@ -163,8 +168,15 @@ set(SOURCES libspeexdsp/buffer.c
             libspeexdsp/scal.c
             libspeexdsp/smallft.c)
 add_library(${{LIBSPEEXDSP}} ${{SOURCES}})
-target_include_directories(${{LIBSPEEXDSP}} PRIVATE include libspeexdsp win32 ${CMAKE_CURRENT_BINARY_DIR}/include)
+target_include_directories(${{LIBSPEEXDSP}} PRIVATE include libspeexdsp win32 ${{CMAKE_CURRENT_BINARY_DIR}}/include)
 target_compile_definitions(${{LIBSPEEXDSP}} PRIVATE D_LIB HAVE_CONFIG_H)
+if (HAVE_STDINT_H)
+    target_compile_definitions(${{LIBSPEEXDSP}} PRIVATE HAVE_STDINT_H)
+  elseif (HAVE_INTTYPES_H)
+    target_compile_definitions(${{LIBSPEEXDSP}} PRIVATE HAVE_INTTYPES_H)
+  elseif (HAVE_SYS_TYPES_H)
+    target_compile_definitions(${{LIBSPEEXDSP}} PRIVATE HAVE_SYS_TYPES_H)
+  endif ()
 '''.format(self._speexdsp_libname)
 
         self.output.info("create CMakeLists.txt file")
@@ -186,10 +198,10 @@ target_compile_definitions(${{LIBSPEEXDSP}} PRIVATE D_LIB HAVE_CONFIG_H)
 #  include <sys/types.h>
 #endif
 
-#cmakedefine typedef @SIZE16@ spx_int16_t;
-#cmakedefine typedef @USIZE16@ spx_uint16_t;
-#cmakedefine typedef @SIZE32@ spx_int32_t;
-#cmakedefine typedef @USIZE32@ spx_uint32_t;
+typedef ${SIZE16} spx_int16_t;
+typedef ${USIZE16} spx_uint16_t;
+typedef ${SIZE32} spx_int32_t;
+typedef ${USIZE32} spx_uint32_t;
 
 #endif
 '''
