@@ -43,7 +43,7 @@ class SpeexDSPConan(ConanFile):
 
     def package(self):
         self.copy("include/speex/*.h", dst=".", src=self._speexdsp_pkg_name)
-        self.copy("*.h", dst="include/speex", src=".")
+        self.copy("speexdsp_config_types.h", dst="include/speex", src=".")
         if self._isVisualStudioBuild():
             self.copy("win32/config.h", dst="include", src=self._speexdsp_pkg_name)
         self.copy("*.lib", dst="lib", keep_path=False)
@@ -152,7 +152,7 @@ message ("determined 'USIZE16' type as '${{USIZE16}}'")
 message ("determined 'SIZE32' type as  '${{SIZE32}}'")
 message ("determined 'USIZE32' type as '${{USIZE32}}'")
 
-configure_file(include/speex/speexdsp_config_types.h.in include/speex/speexdsp_config_types.h)
+configure_file(include/speex/speexdsp_config_types.h.in speexdsp_config_types.h)
 
 include(${{CMAKE_BINARY_DIR}}/conanbuildinfo.cmake)
 conan_basic_setup()
@@ -170,7 +170,7 @@ set(SOURCES libspeexdsp/buffer.c
             libspeexdsp/scal.c
             libspeexdsp/smallft.c)
 add_library(${{LIBSPEEXDSP}} ${{SOURCES}})
-target_include_directories(${{LIBSPEEXDSP}} PRIVATE include libspeexdsp win32 ${{CMAKE_CURRENT_BINARY_DIR}}/include)
+target_include_directories(${{LIBSPEEXDSP}} PRIVATE include libspeexdsp win32 ${{CMAKE_CURRENT_BINARY_DIR}})
 target_compile_definitions(${{LIBSPEEXDSP}} PRIVATE D_LIB HAVE_CONFIG_H)
 if (HAVE_STDINT_H)
     target_compile_definitions(${{LIBSPEEXDSP}} PRIVATE HAVE_STDINT_H)
