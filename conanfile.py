@@ -23,9 +23,7 @@ class SpeexDSPConan(ConanFile):
         url = "http://downloads.xiph.org/releases/speex/{}.tar.gz".format(self._speexdsp_pkg_name)
         self.output.info("Downloading {}".format(url))
         tools.get(url)
-        if self._isVisualStudioBuild():
-            self._createCMakeLists()
-            self._replace_speexdsp_config_types_h_in()
+        self._createCMakeLists()
 
 
     def configure(self):
@@ -45,6 +43,7 @@ class SpeexDSPConan(ConanFile):
 
     def package(self):
         self.copy("include/speex/*.h", dst=".", src=self._speexdsp_pkg_name)
+        self.copy("*.h", dst="include/speex", src=".")
         if self._isVisualStudioBuild():
             self.copy("win32/config.h", dst="include", src=self._speexdsp_pkg_name)
         self.copy("*.lib", dst="lib", keep_path=False)
@@ -82,49 +81,49 @@ check_include_files (sys/types.h HAVE_SYS_TYPES_H)
 check_type_size ("int16_t" INT16_T BUILTIN_TYPES_ONLY LANGUAGE C)
 check_type_size ("short" SHORT16 BUILTIN_TYPES_ONLY LANGUAGE C)
 check_type_size ("int" INT16 BUILTIN_TYPES_ONLY LANGUAGE C)
-if (HAVE_${{INT16_T}})
+if (HAVE_INT16_T)
   set (SIZE16 "int16_t")
-elseif (HAVE_${{SHORT16}})
+elseif (HAVE_SHORT16)
   set (SIZE16 "short")
-elseif (HAVE_${{INT16}})
+elseif (HAVE_INT16)
   set (SIZE16 "int")
 endif ()
-if (NOT DEFINED ${{SIZE16}})
-  message (WARNING "SIZE16 type check failed")
+if (NOT DEFINED SIZE16)
+  message (configure of speexdsp_config_types.h.in will fail - WARNING "SIZE16 type check failed")
 endif ()
 
 check_type_size ("uint16_t" UINT16_T BUILTIN_TYPES_ONLY LANGUAGE C)
 check_type_size ("u_int16_t" U_INT16_T BUILTIN_TYPES_ONLY LANGUAGE C)
 check_type_size ("unsigned short" USHORT16 BUILTIN_TYPES_ONLY LANGUAGE C)
 check_type_size ("unsigned int" UINT16 BUILTIN_TYPES_ONLY LANGUAGE C)
-if (HAVE_${{UINT16_T}})
+if (HAVE_UINT16_T)
   set (USIZE16 "uint16_t")
-elseif (HAVE_${{U_INT16_T}})
+elseif (HAVE_U_INT16_T)
   set (USIZE16 "u_int16_t")
-elseif (HAVE_${{USHORT16}})
+elseif (HAVE_USHORT16)
   set (USIZE16 "unsigned short")
-elseif (HAVE_${{UINT16}})
+elseif (HAVE_UINT16)
   set (USIZE16 "unsigned int")
 endif ()
-if (NOT DEFINED ${{USIZE16}})
-  message (WARNING "USIZE16 type check failed")
+if (NOT DEFINED USIZE16)
+  message (configure of speexdsp_config_types.h.in will fail - WARNING "USIZE16 type check failed")
 endif ()
 
 check_type_size ("int32_t" INT32_T BUILTIN_TYPES_ONLY LANGUAGE C)
 check_type_size ("int" INT32 BUILTIN_TYPES_ONLY LANGUAGE C)
 check_type_size ("long" LONG BUILTIN_TYPES_ONLY LANGUAGE C)
 check_type_size ("short" SHORT32 BUILTIN_TYPES_ONLY LANGUAGE C)
-if (HAVE_${{INT32_T}})
+if (HAVE_INT32_T)
   set (SIZE32 "int32_t")
-elseif (HAVE_${{INT32}})
+elseif (HAVE_INT32)
   set (SIZE32 "int")
-elseif (HAVE_${{LONG}})
+elseif (HAVE_LONG)
   set (SIZE32 "long")
-elseif (HAVE_${{SHORT32}})
+elseif (HAVE_SHORT32)
   set (SIZE32 "short")
 endif ()
-if (NOT DEFINED ${{SIZE32}})
-  message (WARNING "SIZE32 type check failed")
+if (NOT DEFINED SIZE32)
+  message (configure of speexdsp_config_types.h.in will fail - WARNING "SIZE32 type check failed")
 endif ()
 
 check_type_size ("uint32_t" UINT32_T BUILTIN_TYPES_ONLY LANGUAGE C)
@@ -132,25 +131,28 @@ check_type_size ("u_int32_t" U_INT32_T BUILTIN_TYPES_ONLY LANGUAGE C)
 check_type_size ("unsigned short" USHORT32 BUILTIN_TYPES_ONLY LANGUAGE C)
 check_type_size ("unsigned int" UINT32 BUILTIN_TYPES_ONLY LANGUAGE C)
 check_type_size ("unsigned long" ULONG BUILTIN_TYPES_ONLY LANGUAGE C)
-if (HAVE_${{UINT32_T}})
+set (USIZE32 FALSE)
+if (HAVE_UINT32_T)
   set (USIZE32 "uint32_t")
-elseif (HAVE_${{U_INT32_T}})
+elseif (HAVE_U_INT32_T)
   set (USIZE32 "u_int32_t")
-elseif (HAVE_${{USHORT32}})
+elseif (HAVE_USHORT32)
   set (USIZE32 "unsigned short")
-elseif (HAVE_${{UINT32}})
+elseif (HAVE_UINT32)
   set (USIZE32 "unsigned int")
-elseif (HAVE_${{ULONG}})
+elseif (HAVE_ULONG)
   set (USIZE32 "unsigned long")
 endif ()
-if (NOT DEFINED ${{USIZE32}})
-  message (WARNING "USIZE32 type check failed")
+if (NOT DEFINED USIZE32)
+  message (WARNING "configure of speexdsp_config_types.h.in will fail - USIZE32 type check failed")
 endif ()
 
-configure_file(include/speex/speexdsp_config_types.h.in include/speex/speexdsp_config_types.h)
+message ("determined 'SIZE16' type as  '${{SIZE16}}'")
+message ("determined 'USIZE16' type as '${{USIZE16}}'")
+message ("determined 'SIZE32' type as  '${{SIZE32}}'")
+message ("determined 'USIZE32' type as '${{USIZE32}}'")
 
-check_type_size ("bogus" XXX BUILTIN_TYPES_ONLY LANGUAGE C)
-message (FATAL_ERROR "check bogus type val: ${{XXX}}")
+configure_file(include/speex/speexdsp_config_types.h.in include/speex/speexdsp_config_types.h)
 
 include(${{CMAKE_BINARY_DIR}}/conanbuildinfo.cmake)
 conan_basic_setup()
@@ -181,33 +183,6 @@ if (HAVE_STDINT_H)
 
         self.output.info("create CMakeLists.txt file")
         cmake_file = os.path.join(self._speexdsp_pkg_name, "CMakeLists.txt")
-        f = open(cmake_file, "w+")
-        f.write(content)
-        f.close()
-
-    def _replace_speexdsp_config_types_h_in(self):
-        content = '''\
-#ifndef __SPEEX_TYPES_H__
-#define __SPEEX_TYPES_H__
-
-#if defined HAVE_STDINT_H
-#  include <stdint.h>
-#elif defined HAVE_INTTYPES_H
-#  include <inttypes.h>
-#elif defined HAVE_SYS_TYPES_H
-#  include <sys/types.h>
-#endif
-
-typedef ${SIZE16} spx_int16_t;
-typedef ${USIZE16} spx_uint16_t;
-typedef ${SIZE32} spx_int32_t;
-typedef ${USIZE32} spx_uint32_t;
-
-#endif
-'''
-
-        self.output.info("translate speexdsp_config_types.h.in file for cmake configure_file")
-        cmake_file = os.path.join(self._speexdsp_pkg_name, "include", "speex", "speexdsp_config_types.h.in")
         f = open(cmake_file, "w+")
         f.write(content)
         f.close()
