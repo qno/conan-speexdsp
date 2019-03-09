@@ -173,7 +173,7 @@ message ("determined 'SIZE16' type as  '${{SIZE16}}'")
 message ("determined 'USIZE16' type as '${{USIZE16}}'")
 message ("determined 'SIZE32' type as  '${{SIZE32}}'")
 message ("determined 'USIZE32' type as '${{USIZE32}}'")
-message (FATAL_ERROR "exit")
+
 configure_file(include/speex/speexdsp_config_types.h.in speexdsp_config_types.h)
 
 include(${{CMAKE_BINARY_DIR}}/conanbuildinfo.cmake)
