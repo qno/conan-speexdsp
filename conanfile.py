@@ -11,7 +11,7 @@ class SpeexDSPConan(ConanFile):
     url = "https://github.com/qno/conan-speexdsp"
     description = "SpeexDSP is a patent-free, Open Source/Free Software DSP library."
 
-    settings = "os", "arch", "compiler", "build_type", "os_build", "arch_build"
+    settings = "os", "compiler", "build_type", "arch"
     options = {"shared": [True, False]}
     default_options = "shared=False"
     generators = "cmake"
@@ -75,7 +75,7 @@ endif ()
 # https://github.com/xiph/speexdsp/blob/887ac103dbbd0533ed501fc3dd599c876cc0eec7/configure.ac#L280
 # this is not 100% exactly the same, but as this CMakeLists.txt is only for used for MSVC compiler, the
 # obtained types for the typdefs are correct. It even just works without to configure the
-# speexdsp_config_types.h.in at all.
+# speexdsp_config_types.h.in at all for building with Visual Studio.
 
 include (CheckTypeSize)
 include (CheckIncludeFiles)
