@@ -71,6 +71,12 @@ if (NOT MSVC)
   message(FATAL_ERROR "Abort proccessing - this CMake project has only support for MS Visual Studio!")
 endif ()
 
+# the following checks and configure_file steps are trying somehow to reproduce the steps from
+# https://github.com/xiph/speexdsp/blob/887ac103dbbd0533ed501fc3dd599c876cc0eec7/configure.ac#L280
+# this is not 100% exactly the same, but as this CMakeLists.txt is only for used for MSVC compiler, the
+# obtained types for the typdefs are correct. It even just works without to configure the
+# speexdsp_config_types.h.in at all.
+
 include (CheckTypeSize)
 include (CheckIncludeFiles)
 
