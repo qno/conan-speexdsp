@@ -9,6 +9,7 @@ variables:
   conan_upload_url: https://api.bintray.com/conan/qno/conan-public
   conan_upload_only_stable: False
   conan_use_docker_32_images: True
+  conan_stable_branch_pattern: stable/*
 
 jobs:
   - job: Linux
