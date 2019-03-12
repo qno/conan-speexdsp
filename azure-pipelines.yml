@@ -1,16 +1,6 @@
 trigger:
 - master
 
-variables:
-  reference: "qno/testing"
-  current_pkg: "SpeexDSP/1.2rc3/qno/testing"
-  bintray_repository: conan-public
-  conan_user: qno
-  conan_upload_url: https://api.bintray.com/conan/qno/conan-public
-  conan_upload_only_stable: False
-  conan_use_docker_32_images: True
-  conan_stable_branch_pattern: stable/*
-
 jobs:
   - job: Linux
     pool:
@@ -108,15 +98,6 @@ jobs:
           pip3 install --user conan_package_tools bincrafters_package_tools
           conan user
           python3 build.py
-        env:
-          # https://github.com/bincrafters/bincrafters-package-tools
-          BINTRAY_REPOSITORY: $(bintray_repository)
-          CONAN_USERNAME: $(conan_user)
-          CONAN_UPLOAD: $(conan_upload_url)
-          CONAN_LOGIN_USERNAME: $(BINTRAY_LOGIN)
-          CONAN_PASSWORD: $(BINTRAY_API_KEY)
-          CONAN_UPLOAD_ONLY_WHEN_STABLE: $(conan_upload_only_stable)
-          CONAN_DOCKER_32_IMAGES: $(conan_use_docker_32_images)
         displayName: conan create package
   - job: macOS
     pool:
@@ -161,15 +142,6 @@ jobs:
           fi
           pyenv activate conan
           python3 build.py
-        env:
-          # https://github.com/bincrafters/bincrafters-package-tools
-          BINTRAY_REPOSITORY: $(bintray_repository)
-          CONAN_USERNAME: $(conan_user)
-          CONAN_UPLOAD: $(conan_upload_url)
-          CONAN_LOGIN_USERNAME: $(BINTRAY_LOGIN)
-          CONAN_PASSWORD: $(BINTRAY_API_KEY)
-          CONAN_UPLOAD_ONLY_WHEN_STABLE: $(conan_upload_only_stable)
-          CONAN_DOCKER_32_IMAGES: $(conan_use_docker_32_images)
         displayName: conan create package
   - job: Windows
     pool:
@@ -191,13 +163,4 @@ jobs:
           %PYTHON_HOME%/python -m pip install conan_package_tools bincrafters_package_tools
           conan user
           %PYTHON_HOME%/python build.py
-        env:
-          # https://github.com/bincrafters/bincrafters-package-tools
-          BINTRAY_REPOSITORY: $(bintray_repository)
-          CONAN_USERNAME: $(conan_user)
-          CONAN_UPLOAD: $(conan_upload_url)
-          CONAN_LOGIN_USERNAME: $(BINTRAY_LOGIN)
-          CONAN_PASSWORD: $(BINTRAY_API_KEY)
-          CONAN_UPLOAD_ONLY_WHEN_STABLE: $(conan_upload_only_stable)
-          CONAN_DOCKER_32_IMAGES: $(conan_use_docker_32_images)
         displayName: conan create package
