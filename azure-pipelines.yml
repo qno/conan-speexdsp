@@ -107,8 +107,6 @@ jobs:
           sudo pip3 install --upgrade conan
           sudo pip install conan_package_tools bincrafters_package_tools
           conan user
-        displayName: install conan
-      - script: |
           python3 build.py
         env:
           # https://github.com/bincrafters/bincrafters-package-tools
@@ -120,11 +118,6 @@ jobs:
           CONAN_UPLOAD_ONLY_WHEN_STABLE: $(conan_upload_only_stable)
           CONAN_DOCKER_32_IMAGES: $(conan_use_docker_32_images)
         displayName: conan create package
-      - script: |
-          echo "TODO ..."
-          conan search
-          conan search $(current_pkg)
-        displayName: conan publish recipe and package
   - job: macOS
     pool:
       vmImage: xcode9-macos10.13
@@ -162,8 +155,7 @@ jobs:
           pip3 install --upgrade conan
           pip3 install conan_package_tools bincrafters_package_tools
           conan user
-        displayName: install conan
-      - script: |
+
           if which pyenv > /dev/null; then
             eval "$(pyenv init -)"
           fi
@@ -179,11 +171,6 @@ jobs:
           CONAN_UPLOAD_ONLY_WHEN_STABLE: $(conan_upload_only_stable)
           CONAN_DOCKER_32_IMAGES: $(conan_use_docker_32_images)
         displayName: conan create package
-      - script: |
-          echo "TODO ..."
-          conan search
-          conan search $(current_pkg)
-        displayName: conan publish recipe and package
   - job: Windows
     pool:
       vmImage: vs2017-win2016
@@ -197,14 +184,12 @@ jobs:
           CONAN_BUILD_TYPES: Debug
     steps:
       - script: |
+          set PATH=%PYTHON_HOME%\Scripts;%PATH%
           :: need to add PYTHON_HOME as there is a conflicting chocolatey installed python which is somehow prefered in PATH
           %PYTHON_HOME%/python -m pip install --upgrade pip
           %PYTHON_HOME%/python -m pip install --upgrade conan
           %PYTHON_HOME%/python -m pip install conan_package_tools bincrafters_package_tools
           conan user
-        displayName: install conan
-      - script: |
-          set PATH=%PYTHON_HOME%\Scripts;%PATH%
           %PYTHON_HOME%/python build.py
         env:
           # https://github.com/bincrafters/bincrafters-package-tools
@@ -216,9 +201,3 @@ jobs:
           CONAN_UPLOAD_ONLY_WHEN_STABLE: $(conan_upload_only_stable)
           CONAN_DOCKER_32_IMAGES: $(conan_use_docker_32_images)
         displayName: conan create package
-      - script: |
-          echo "TODO ..."
-          conan search
-          conan search $(current_pkg)
-          SET
-        displayName: conan publish recipe and package
