@@ -1,15 +1,6 @@
 trigger:
 - master
 
-variables:
-  reference: "qno/testing"
-  current_pkg: "SpeexDSP/1.2rc3/qno/testing"
-  bintray_repository: conan-public
-  conan_user: qno
-  conan_upload_url: https://api.bintray.com/conan/qno/conan-public
-  conan_upload_only_stable: False
-  conan_use_docker_32_images: True
-
 jobs:
   - job: Linux
     pool:
@@ -97,30 +88,17 @@ jobs:
           CONAN_DOCKER_IMAGE: conanio/clang7
           CONAN_ARCHS: "x86_64"
     steps:
+      - task: UsePythonVersion@0
+        inputs:
+         versionSpec: "3.7"
       - script: |
           sudo apt install -y python3-setuptools
-          sudo pip3 install --upgrade pip
-          sudo pip3 install conan
-          sudo pip install  conan_package_tools bincrafters_package_tools
+          pip3 install --user --upgrade pip
+          pip3 install --user --upgrade conan
+          pip3 install --user conan_package_tools bincrafters_package_tools
           conan user
-        displayName: install conan
-      - script: |
           python3 build.py
-        env:
-          # https://github.com/bincrafters/bincrafters-package-tools
-          BINTRAY_REPOSITORY: $(bintray_repository)
-          CONAN_USERNAME: $(conan_user)
-          CONAN_UPLOAD: $(conan_upload_url)
-          CONAN_LOGIN_USERNAME: $(BINTRAY_LOGIN)
-          CONAN_PASSWORD: $(BINTRAY_API_KEY)
-          CONAN_UPLOAD_ONLY_WHEN_STABLE: $(conan_upload_only_stable)
-          CONAN_DOCKER_32_IMAGES: $(conan_use_docker_32_images)
         displayName: conan create package
-      - script: |
-          echo "TODO ..."
-          conan search
-          conan search $(current_pkg)
-        displayName: conan publish recipe and package
   - job: macOS
     pool:
       vmImage: xcode9-macos10.13
@@ -141,28 +119,30 @@ jobs:
     steps:
       - script: |
           /bin/bash -c "sudo xcode-select -s /Applications/Xcode_$(XCODE_VERSION).app/Contents/Developer"
+
+          brew update || brew update
+          brew outdated pyenv || brew upgrade pyenv
+          brew install pyenv-virtualenv
+          brew install cmake || true
+          if which pyenv > /dev/null; then
+            eval "$(pyenv init -)"
+          fi
+          pyenv install 3.7.1
+          pyenv virtualenv 3.7.1 conan
+          pyenv rehash
+          pyenv activate conan
+
           pip3 install --upgrade pip
-          pip3 install conan
+          pip3 install --upgrade conan
           pip3 install conan_package_tools bincrafters_package_tools
           conan user
-        displayName: install conan
-      - script: |
+
+          if which pyenv > /dev/null; then
+            eval "$(pyenv init -)"
+          fi
+          pyenv activate conan
           python3 build.py
-        env:
-          # https://github.com/bincrafters/bincrafters-package-tools
-          BINTRAY_REPOSITORY: $(bintray_repository)
-          CONAN_USERNAME: $(conan_user)
-          CONAN_UPLOAD: $(conan_upload_url)
-          CONAN_LOGIN_USERNAME: $(BINTRAY_LOGIN)
-          CONAN_PASSWORD: $(BINTRAY_API_KEY)
-          CONAN_UPLOAD_ONLY_WHEN_STABLE: $(conan_upload_only_stable)
-          CONAN_DOCKER_32_IMAGES: $(conan_use_docker_32_images)
         displayName: conan create package
-      - script: |
-          echo "TODO ..."
-          conan search
-          conan search $(current_pkg)
-        displayName: conan publish recipe and package
   - job: Windows
     pool:
       vmImage: vs2017-win2016
@@ -176,28 +156,11 @@ jobs:
           CONAN_BUILD_TYPES: Debug
     steps:
       - script: |
+          set PATH=%PYTHON_HOME%\Scripts;%PATH%
           :: need to add PYTHON_HOME as there is a conflicting chocolatey installed python which is somehow prefered in PATH
           %PYTHON_HOME%/python -m pip install --upgrade pip
-          %PYTHON_HOME%/python -m pip install conan
+          %PYTHON_HOME%/python -m pip install --upgrade conan
           %PYTHON_HOME%/python -m pip install conan_package_tools bincrafters_package_tools
           conan user
-        displayName: install conan
-      - script: |
-          set PATH=%PYTHON_HOME%\Scripts;%PATH%
           %PYTHON_HOME%/python build.py
-        env:
-          # https://github.com/bincrafters/bincrafters-package-tools
-          BINTRAY_REPOSITORY: $(bintray_repository)
-          CONAN_USERNAME: $(conan_user)
-          CONAN_UPLOAD: $(conan_upload_url)
-          CONAN_LOGIN_USERNAME: $(BINTRAY_LOGIN)
-          CONAN_PASSWORD: $(BINTRAY_API_KEY)
-          CONAN_UPLOAD_ONLY_WHEN_STABLE: $(conan_upload_only_stable)
-          CONAN_DOCKER_32_IMAGES: $(conan_use_docker_32_images)
         displayName: conan create package
-      - script: |
-          echo "TODO ..."
-          conan search
-          conan search $(current_pkg)
-          SET
-        displayName: conan publish recipe and package
