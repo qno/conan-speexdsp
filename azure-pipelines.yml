@@ -98,11 +98,14 @@ jobs:
           CONAN_DOCKER_IMAGE: conanio/clang7
           CONAN_ARCHS: "x86_64"
     steps:
+      - task: UsePythonVersion@0
+        inputs:
+         versionSpec: "3.7"
       - script: |
           sudo apt install -y python3-setuptools
           sudo pip3 install --upgrade pip
-          sudo pip3 install conan
-          sudo pip install  conan_package_tools bincrafters_package_tools
+          sudo pip3 install --upgrade conan
+          sudo pip install conan_package_tools bincrafters_package_tools
           conan user
         displayName: install conan
       - script: |
@@ -142,12 +145,29 @@ jobs:
     steps:
       - script: |
           /bin/bash -c "sudo xcode-select -s /Applications/Xcode_$(XCODE_VERSION).app/Contents/Developer"
+
+          brew update || brew update
+          brew outdated pyenv || brew upgrade pyenv
+          brew install pyenv-virtualenv
+          brew install cmake || true
+          if which pyenv > /dev/null; then
+            eval "$(pyenv init -)"
+          fi
+          pyenv install 3.7.1
+          pyenv virtualenv 3.7.1 conan
+          pyenv rehash
+          pyenv activate conan
+
           pip3 install --upgrade pip
-          pip3 install conan
+          pip3 install --upgrade conan
           pip3 install conan_package_tools bincrafters_package_tools
           conan user
         displayName: install conan
       - script: |
+          if which pyenv > /dev/null; then
+            eval "$(pyenv init -)"
+          fi
+          pyenv activate conan
           python3 build.py
         env:
           # https://github.com/bincrafters/bincrafters-package-tools
@@ -179,7 +199,7 @@ jobs:
       - script: |
           :: need to add PYTHON_HOME as there is a conflicting chocolatey installed python which is somehow prefered in PATH
           %PYTHON_HOME%/python -m pip install --upgrade pip
-          %PYTHON_HOME%/python -m pip install conan
+          %PYTHON_HOME%/python -m pip install --upgrade conan
           %PYTHON_HOME%/python -m pip install conan_package_tools bincrafters_package_tools
           conan user
         displayName: install conan
