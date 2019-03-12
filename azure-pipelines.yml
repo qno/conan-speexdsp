@@ -103,9 +103,9 @@ jobs:
          versionSpec: "3.7"
       - script: |
           sudo apt install -y python3-setuptools
-          sudo pip3 install --upgrade pip
-          sudo pip3 install --upgrade conan
-          sudo pip install conan_package_tools bincrafters_package_tools
+          pip3 install --user --upgrade pip
+          pip3 install --user --upgrade conan
+          pip3 install --user conan_package_tools bincrafters_package_tools
           conan user
           python3 build.py
         env:
