@@ -11,7 +11,7 @@ os.environ["CONAN_LOGIN_USERNAME"]          = "qno"
 os.environ["CONAN_STABLE_BRANCH_PATTERN"]   = "stable/*"
 os.environ["CONAN_UPLOAD_ONLY_WHEN_STABLE"] = "0"
 os.environ["CONAN_DOCKER_32_IMAGES"]        = "1"
-os.environ["CONAN_CHANNEL"]        = "testing"
+os.environ["CONAN_CHANNEL"]                 = "testing"
 
 
 def _is_static_msvc_build(build):
