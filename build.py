@@ -3,7 +3,7 @@ import os
 
 # see https://github.com/bincrafters/bincrafters-package-tools/blob/master/README.md
 # see https://github.com/conan-io/conan-package-tools/blob/develop/README.md
-#os.environ["BINTRAY_REPOSITORY"]            = "conan-public"
+os.environ["BINTRAY_REPOSITORY"]            = "conan-public"
 os.environ["CONAN_UPLOAD"]                  = "https://api.bintray.com/conan/qno/conan-public"
 os.environ["CONAN_USERNAME"]                = "qno"
 os.environ["CONAN_PASSWORD"]                = os.environ["BINTRAY_API_KEY"] # set by azure job
