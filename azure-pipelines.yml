@@ -2,9 +2,9 @@ trigger:
 - master
 
 variables:
-  conan-pkg: "conan==1.12.3"
-  cpt-pkg:  "conan_package_tools==0.23.0"
-  bpt-pkg: "bincrafters_package_tools==0.17.8"
+  conan-pkg: "conan"
+  cpt-pkg:  "conan_package_tools"
+  bpt-pkg: "bincrafters_package_tools"
 
 jobs:
   - job: Linux
