@@ -145,7 +145,28 @@ jobs:
 
           python3 build.py
         displayName: conan create package
-  - job: Windows
+  - job: Windows2012
+    pool:
+      vmImage: vs2015-win2012r2
+    strategy:
+      matrix:
+        VStudio 2015 Release:
+          CONAN_VISUAL_VERSIONS: 14
+          CONAN_BUILD_TYPES: Release
+        VStudio 2015 Debug:
+          CONAN_VISUAL_VERSIONS: 14
+          CONAN_BUILD_TYPES: Debug
+    steps:
+      - script: |
+          set PATH=%PYTHON_HOME%\Scripts;%PATH%
+          :: need to add PYTHON_HOME as there is a conflicting chocolatey installed python which is somehow prefered in PATH
+          %PYTHON_HOME%/python -m pip install --upgrade pip
+          %PYTHON_HOME%/python -m pip install $(conan-pkg)
+          %PYTHON_HOME%/python -m pip install $(cpt-pkg) $(bpt-pkg)
+          conan user
+          %PYTHON_HOME%/python build.py
+        displayName: conan create package
+  - job: Windows2016
     pool:
       vmImage: vs2017-win2016
     strategy:
@@ -155,6 +176,27 @@ jobs:
           CONAN_BUILD_TYPES: Release
         VStudio 2017 Debug:
           CONAN_VISUAL_VERSIONS: 15
+          CONAN_BUILD_TYPES: Debug
+    steps:
+      - script: |
+          set PATH=%PYTHON_HOME%\Scripts;%PATH%
+          :: need to add PYTHON_HOME as there is a conflicting chocolatey installed python which is somehow prefered in PATH
+          %PYTHON_HOME%/python -m pip install --upgrade pip
+          %PYTHON_HOME%/python -m pip install $(conan-pkg)
+          %PYTHON_HOME%/python -m pip install $(cpt-pkg) $(bpt-pkg)
+          conan user
+          %PYTHON_HOME%/python build.py
+        displayName: conan create package
+  - job: Windows2019
+    pool:
+      vmImage: windows-2019
+    strategy:
+      matrix:
+        VStudio 2019 Release:
+          CONAN_VISUAL_VERSIONS: 16
+          CONAN_BUILD_TYPES: Release
+        VStudio 2019 Debug:
+          CONAN_VISUAL_VERSIONS: 16
           CONAN_BUILD_TYPES: Debug
     steps:
       - script: |
