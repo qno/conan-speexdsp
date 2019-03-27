@@ -158,8 +158,9 @@ jobs:
           CONAN_BUILD_TYPES: Debug
     steps:
       - script: |
+          set PYTHON_HOME=C:\Python27
+          set PATH=%PYTHON_HOME%\Tools\Scripts;%PYTHON_HOME%\Scripts;%PATH%
           set
-          :: set PATH=%PYTHON_HOME%\Scripts;%PATH%
           :: :: need to add PYTHON_HOME as there is a conflicting chocolatey installed python which is somehow prefered in PATH
           python -m pip install --upgrade pip
           python -m pip install $(conan-pkg)
