@@ -125,6 +125,7 @@ jobs:
       - script: |
           /bin/bash -c "sudo xcode-select -s /Applications/Xcode_$(XCODE_VERSION).app/Contents/Developer"
           export PATH=$PATH:$HOME/.local/bin
+          pip install --upgrade pip
           brew update || brew update
           brew outdated pyenv || brew upgrade pyenv
           brew install pyenv-virtualenv
@@ -137,9 +138,9 @@ jobs:
           pyenv rehash
           pyenv activate conan
 
-          pip3 install --upgrade pip
-          pip3 install --user $(conan-pkg)
-          pip3 install --user $(cpt-pkg) $(bpt-pkg)
+          pip install --upgrade pip
+          pip install --upgrade $(conan-pkg)
+          pip install $(cpt-pkg) $(bpt-pkg)
           conan user
 
           python3 build.py
