@@ -160,15 +160,16 @@ jobs:
       - powershell: |
           Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
           choco install -y python
-          set PYTHONHOME=C:\Python27
-          set PATH=%PYTHONHOME%\Tools\Scripts;%PYTHONHOME%\Scripts;%PATH%
+      - script: |
+          set PYTHON_HOME=C:\Python37
+          set PATH=%PYTHON_HOME%\Scripts;%PATH%
           set
           :: :: need to add PYTHON_HOME as there is a conflicting chocolatey installed python which is somehow prefered in PATH
-          python -m pip install --upgrade pip
-          python -m pip install $(conan-pkg)
-          python -m pip install $(cpt-pkg) $(bpt-pkg)
+          %PYTHON_HOME%/python -m pip install --upgrade pip
+          %PYTHON_HOME%/python -m pip install $(conan-pkg)
+          %PYTHON_HOME%/python -m pip install $(cpt-pkg) $(bpt-pkg)
           conan user
-          python build.py
+          %PYTHON_HOME%/python build.py
         displayName: conan create package
 #  - job: Windows2016
 #    pool:
