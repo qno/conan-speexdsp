@@ -162,6 +162,7 @@ jobs:
           set PATH=%PYTHONHOME%\Tools\Scripts;%PYTHONHOME%\Scripts;%PATH%
           set
           :: :: need to add PYTHON_HOME as there is a conflicting chocolatey installed python which is somehow prefered in PATH
+          curl -s https://bootstrap.pypa.io/get-pip.py | python
           python -m pip install --upgrade pip
           python -m pip install $(conan-pkg)
           python -m pip install $(cpt-pkg) $(bpt-pkg)
