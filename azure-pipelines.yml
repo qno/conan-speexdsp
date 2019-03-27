@@ -159,6 +159,7 @@ jobs:
     steps:
       - script: |
           set
+          python --version
           :: set PATH=%PYTHON_HOME%\Scripts;%PATH%
           :: :: need to add PYTHON_HOME as there is a conflicting chocolatey installed python which is somehow prefered in PATH
           :: %PYTHON_HOME%/python -m pip install --upgrade pip
