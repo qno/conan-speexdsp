@@ -157,7 +157,7 @@ jobs:
           CONAN_VISUAL_VERSIONS: 14
           CONAN_BUILD_TYPES: Debug
     steps:
-      - script: |
+      - powershell: |
           Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
           choco install -y python
           set PYTHONHOME=C:\Python27
