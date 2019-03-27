@@ -97,7 +97,6 @@ jobs:
         inputs:
          versionSpec: "3.7"
       - script: |
-          git config --system core.autocrlf input
           sudo apt install -y python3-setuptools
           pip3 install --user --upgrade pip
           pip3 install --user $(conan-pkg)
@@ -124,7 +123,6 @@ jobs:
           XCODE_VERSION: 10
     steps:
       - script: |
-          git config --system core.autocrlf input
           /bin/bash -c "sudo xcode-select -s /Applications/Xcode_$(XCODE_VERSION).app/Contents/Developer"
           export PATH=$PATH:$HOME/.local/bin
           pip install --upgrade pip
@@ -160,7 +158,6 @@ jobs:
           CONAN_BUILD_TYPES: Debug
     steps:
       - script: |
-          git config --system core.autocrlf input
           set PATH=%PYTHON_HOME%\Scripts;%PATH%
           :: need to add PYTHON_HOME as there is a conflicting chocolatey installed python which is somehow prefered in PATH
           %PYTHON_HOME%/python -m pip install --upgrade pip
