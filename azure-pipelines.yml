@@ -206,7 +206,7 @@ jobs:
       - script: |
           cmake --version
           set PATH=%PYTHON_HOME%\Scripts;%PATH%
-          cup -y all
+          choco install -y cmake
           cmake --version
           set
           :: need to add PYTHON_HOME as there is a conflicting chocolatey installed python which is somehow prefered in PATH
