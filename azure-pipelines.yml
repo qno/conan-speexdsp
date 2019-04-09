@@ -196,8 +196,6 @@ jobs:
           CONAN_VISUAL_VERSIONS: 16
           CONAN_BUILD_TYPES: Debug
     steps:
-      - powershell:
-          choco upgrade cmake.install -y
       - script: |
           set PATH=%PYTHON_HOME%\Scripts;%PATH%
           :: need to add PYTHON_HOME as there is a conflicting chocolatey installed python which is somehow prefered in PATH
