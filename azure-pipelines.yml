@@ -185,6 +185,7 @@ jobs:
 #          conan user
 #          %PYTHON_HOME%/python build.py
 #        displayName: conan create package
+# bumpci
   - job: Windows2019
     pool:
       vmImage: windows-2019
