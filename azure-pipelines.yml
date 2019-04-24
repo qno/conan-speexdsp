@@ -202,6 +202,7 @@ jobs:
         inputs:
          versionSpec: $(python-version)
       - script: |
+          choco upgrade cmake.install -y --installargs 'ADD_CMAKE_TO_PATH=""System""'
           python -m pip install --upgrade pip
           python -m pip install $(conan-pkg)
           python -m pip install $(cpt-pkg) $(bpt-pkg)
