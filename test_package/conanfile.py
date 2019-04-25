@@ -20,9 +20,4 @@ class SpeexdspTestConan(ConanFile):
     def test(self):
         if not tools.cross_building(self.settings):
             os.chdir("bin")
-            for test in ["testdenoise", "testecho", "testjitter", "testresample", "testresample2"]:
-                if test == "testjitter":
-                    self.output.info("running '{}'".format(test))
-                    self.run(".{}{}".format(os.sep, test))
-                else:
-                    self.output.warn("skip running '{}' - as it can't be executed within this test environment".format(test))
+            self.run(".{}speexdsptest".format(os.sep))
