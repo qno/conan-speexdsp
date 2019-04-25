@@ -16,11 +16,11 @@ class SpeexDSPConan(ConanFile):
     default_options = "shared=False"
     generators = "cmake"
 
-    _speexdsp_pkg_name = "speexdsp-1.2rc3"
-    _speexdsp_libname = "speexdsp"
+    _pkg_name = "speexdsp-1.2rc3"
+    _libname = "speexdsp"
 
     def source(self):
-        url = "http://downloads.xiph.org/releases/speex/{}.tar.gz".format(self._speexdsp_pkg_name)
+        url = "http://downloads.xiph.org/releases/speex/{}.tar.gz".format(self._pkg_name)
         self.output.info("Downloading {}".format(url))
         tools.get(url)
         self._createCMakeLists()
@@ -33,19 +33,19 @@ class SpeexDSPConan(ConanFile):
     def build(self):
         if self._isVisualStudioBuild():
             cmake = CMake(self)
-            cmake.configure(source_dir=self._speexdsp_pkg_name)
+            cmake.configure(source_dir=self._pkg_name)
             cmake.build()
         else:
             autotools = AutoToolsBuildEnvironment(self)
-            autotools.configure(configure_dir=self._speexdsp_pkg_name)
+            autotools.configure(configure_dir=self._pkg_name)
             autotools.make()
             autotools.install()
 
     def package(self):
-        self.copy("include/speex/*.h", dst=".", src=self._speexdsp_pkg_name)
+        self.copy("include/speex/*.h", dst=".", src=self._pkg_name)
         self.copy("speexdsp_config_types.h", dst="include/speex", src=".")
         if self._isVisualStudioBuild():
-            self.copy("win32/config.h", dst="include", src=self._speexdsp_pkg_name)
+            self.copy("win32/config.h", dst="include", src=self._pkg_name)
         self.copy("*.lib", dst="lib", keep_path=False)
         self.copy("*.dll", dst="lib", keep_path=False)
         self.copy("*.so", dst="lib", keep_path=False)
@@ -53,7 +53,7 @@ class SpeexDSPConan(ConanFile):
         self.copy("*.a", dst="lib", keep_path=False)
 
     def package_info(self):
-        self.cpp_info.libs = [self._speexdsp_libname]
+        self.cpp_info.libs = [self._libname]
         if self._isVisualStudioBuild():
             # in include/win32 config.h is provided
             self.cpp_info.includedirs = ["include", "include/win32"]
@@ -201,10 +201,10 @@ if (HAVE_STDINT_H)
   elseif (HAVE_SYS_TYPES_H)
     target_compile_definitions(${{LIBSPEEXDSP}} PRIVATE HAVE_SYS_TYPES_H)
   endif ()
-'''.format(self._speexdsp_libname)
+'''.format(self._libname)
 
         self.output.info("create CMakeLists.txt file")
-        cmake_file = os.path.join(self._speexdsp_pkg_name, "CMakeLists.txt")
+        cmake_file = os.path.join(self._pkg_name, "CMakeLists.txt")
         f = open(cmake_file, "w+")
         f.write(content)
         f.close()
