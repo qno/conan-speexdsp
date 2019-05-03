@@ -13,7 +13,7 @@ class SpeexDSPConan(ConanFile):
 
     settings = "os", "compiler", "build_type", "arch"
     options = {"shared": [True, False]}
-    default_options = "shared=False"
+    default_options = {"shared": False}
     generators = "cmake"
 
     _pkg_name = "speexdsp-1.2rc3"
