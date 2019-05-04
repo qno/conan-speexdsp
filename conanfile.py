@@ -36,8 +36,13 @@ class SpeexDSPConan(ConanFile):
             cmake.configure(source_dir=self._pkg_name)
             cmake.build()
         else:
+            config_args = []
+            if self.options.shared:
+                config_args = ["--disable-static"]
+            else:
+                config_args = ["--disable-shared"]
             autotools = AutoToolsBuildEnvironment(self)
-            autotools.configure(configure_dir=self._pkg_name)
+            autotools.configure(configure_dir=self._pkg_name, args=config_args)
             autotools.make()
             autotools.install()
 
