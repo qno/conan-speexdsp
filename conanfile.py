@@ -36,8 +36,13 @@ class SpeexDSPConan(ConanFile):
             cmake.configure(source_dir=self._pkg_name)
             cmake.build()
         else:
+            config_args = []
+            if self.options.shared:
+                config_args = ["--disable-static"]
+            else:
+                config_args = ["--disable-shared"]
             autotools = AutoToolsBuildEnvironment(self)
-            autotools.configure(configure_dir=self._pkg_name)
+            autotools.configure(configure_dir=self._pkg_name, args=config_args)
             autotools.make()
             autotools.install()
 
@@ -48,7 +53,7 @@ class SpeexDSPConan(ConanFile):
             self.copy("win32/config.h", dst="include", src=self._pkg_name)
         self.copy("*.lib", dst="lib", keep_path=False)
         self.copy("*.dll", dst="lib", keep_path=False)
-        self.copy("*.so", dst="lib", keep_path=False)
+        self.copy("*.so*", dst="lib", keep_path=False)
         self.copy("*.dylib", dst="lib", keep_path=False)
         self.copy("*.a", dst="lib", keep_path=False)
 
