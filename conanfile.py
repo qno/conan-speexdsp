@@ -34,7 +34,6 @@ class SpeexDSPConan(ConanFile):
         tools.get(url)
         self._createCMakeLists()
 
-
     def configure(self):
         del self.settings.compiler.libcxx
 
