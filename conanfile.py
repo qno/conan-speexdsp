@@ -9,6 +9,7 @@ class SpeexDSPConan(ConanFile):
     license = "BSD"
     author = "Xiph.Org Foundation"
     url = "https://github.com/qno/conan-speexdsp"
+    homepage = "https://github.com/xiph/speexdsp"
     description = "SpeexDSP is a patent-free, Open Source/Free Software DSP library."
 
     settings = "os", "compiler", "build_type", "arch"
