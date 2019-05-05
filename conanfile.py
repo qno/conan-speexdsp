@@ -12,8 +12,16 @@ class SpeexDSPConan(ConanFile):
     description = "SpeexDSP is a patent-free, Open Source/Free Software DSP library."
 
     settings = "os", "compiler", "build_type", "arch"
-    options = {"shared": [True, False]}
-    default_options = {"shared": False}
+
+    options = {
+        "shared": [True, False],
+        "fPIC": [True, False]
+        }
+    default_options = {
+        "shared": False,
+         "fPIC": True
+         }
+
     generators = "cmake"
 
     _pkg_name = "speexdsp-1.2rc3"
@@ -27,8 +35,12 @@ class SpeexDSPConan(ConanFile):
 
 
     def configure(self):
-        if self._isVisualStudioBuild() and self.options.shared:
-            raise ConanInvalidConfiguration("This library doesn't support dll's on Windows")
+        del self.settings.compiler.libcxx
+
+        if self._isVisualStudioBuild():
+            del self.options.fPIC
+            if self.options.shared:
+                raise ConanInvalidConfiguration("This library doesn't support dll's on Windows")
 
     def build(self):
         if self._isVisualStudioBuild():
@@ -37,10 +49,13 @@ class SpeexDSPConan(ConanFile):
             cmake.build()
         else:
             config_args = []
+            if self.options.fPIC:
+                config_args.append("--with-pic")
+
             if self.options.shared:
-                config_args = ["--disable-static"]
+                config_args.append("--disable-static")
             else:
-                config_args = ["--disable-shared"]
+                config_args.append("--disable-shared")
             autotools = AutoToolsBuildEnvironment(self)
             autotools.configure(configure_dir=self._pkg_name, args=config_args)
             autotools.make()
