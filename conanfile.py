@@ -1,6 +1,6 @@
 from conans import ConanFile, CMake, AutoToolsBuildEnvironment, tools
 from conans.errors import ConanInvalidConfiguration
-import os
+import os, platform
 
 
 class SpeexDSPConan(ConanFile):
@@ -48,6 +48,7 @@ class SpeexDSPConan(ConanFile):
             cmake.configure(source_dir=self._pkg_name)
             cmake.build()
         else:
+            is_windows_build = platform.system() == "Windows"
             config_args = []
             if self.options.fPIC:
                 config_args.append("--with-pic")
@@ -56,7 +57,7 @@ class SpeexDSPConan(ConanFile):
                 config_args.append("--disable-static")
             else:
                 config_args.append("--disable-shared")
-            autotools = AutoToolsBuildEnvironment(self)
+            autotools = AutoToolsBuildEnvironment(self, win_bash=is_windows_build)
             autotools.configure(configure_dir=self._pkg_name, args=config_args)
             autotools.make()
             autotools.install()
