@@ -57,10 +57,12 @@ class SpeexDSPConan(ConanFile):
                 config_args.append("--disable-static")
             else:
                 config_args.append("--disable-shared")
+
             autotools = AutoToolsBuildEnvironment(self, win_bash=is_windows_build)
-            autotools.configure(configure_dir=self._pkg_name, args=config_args)
-            autotools.make()
-            autotools.install()
+            with tools.environment_append(autotools.vars):
+                autotools.configure(configure_dir=self._pkg_name, args=config_args)
+                autotools.make()
+                autotools.install()
 
     def package(self):
         self.copy("include/speex/*.h", dst=".", src=self._pkg_name)
@@ -81,6 +83,9 @@ class SpeexDSPConan(ConanFile):
 
     def _isVisualStudioBuild(self):
         return self.settings.os == "Windows" and self.settings.compiler == "Visual Studio"
+
+    def _isMinGWBuild(self):
+        return self.settings.os == "Windows" and self.settings.compiler == "gcc"
 
     def _createCMakeLists(self):
         content = '''\
