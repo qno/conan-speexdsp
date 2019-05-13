@@ -58,7 +58,8 @@ class SpeexDSPConan(ConanFile):
             else:
                 config_args.append("--disable-shared")
 
-            with tools.remove_from_path("Git\bin\bash.exe"):
+            # remove Git bash from path
+            with tools.remove_from_path("bash"):
                 autotools = AutoToolsBuildEnvironment(self, win_bash=is_windows_build)
                 autotools.configure(configure_dir=self._pkg_name, args=config_args)
                 autotools.make()
