@@ -1,5 +1,5 @@
 from bincrafters import build_template_default
-import os
+import os, platform, copy
 
 # see https://github.com/bincrafters/bincrafters-package-tools/blob/master/README.md
 # see https://github.com/conan-io/conan-package-tools/blob/develop/README.md
@@ -15,13 +15,31 @@ os.environ["CONAN_CHANNEL"]                 = "testing"
 
 
 def _is_static_msvc_build(build):
-  if build.options["SpeexDSP:shared"] == True and build.settings["compiler"] == "Visual Studio":
-    return False
-  else:
-    return True
+    if build.options["SpeexDSP:shared"] == True and build.settings["compiler"] == "Visual Studio":
+      return False
+    else:
+      return True
 
 
 if __name__ == "__main__":
-  builder = build_template_default.get_builder()
-  builder.builds = filter(_is_static_msvc_build , builder.items)
-  builder.run()
+    builder = build_template_default.get_builder()
+
+    # taken from - https://github.com/bincrafters/conan-libcurl/blob/testing/7.64.1/build.py
+    items = []
+    for item in builder.items:
+        # skip mingw cross-builds
+        if not (platform.system() == "Windows" and item.settings["compiler"] == "gcc" and
+                item.settings["arch"] == "x86"):
+            new_build_requires = copy.copy(item.build_requires)
+            if platform.system() == "Windows" and item.settings["compiler"] == "gcc":
+                # add msys2 and mingw as a build requirement for mingw builds
+                new_build_requires["*"] = new_build_requires.get("*", []) + \
+                    ["mingw_installer/1.0@conan/stable",
+                     "msys2_installer/latest@bincrafters/stable"]
+
+            items.append([item.settings, item.options, item.env_vars,
+                          new_build_requires, item.reference])
+    builder.items = items
+
+    builder.builds = filter(_is_static_msvc_build , builder.items)
+    builder.run()
