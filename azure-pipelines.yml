@@ -246,6 +246,8 @@ jobs:
   - job: MinGW
     pool:
       vmImage: vs2017-win2016
+    variables:
+      CONAN_BUILD_REQUIRES: "msys2_installer/latest@bincrafters/stable"
     strategy:
       matrix:
         GCC 7 Release:
